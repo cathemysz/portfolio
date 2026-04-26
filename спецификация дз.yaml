@@ -1,0 +1,322 @@
+openapi: 3.0.0
+info:
+  title: VK Pay Auth API
+  version: 1.0.0
+  description: API для аутентификации и управления сессиями пользователей VK Pay
+
+servers:
+  - url: https://api.vkpay.example.com/v1
+    description: Production сервер
+  - url: https://staging-api.vkpay.example.com/v1
+    description: Staging сервер
+
+paths:
+  /auth/register/start:
+    post:
+      summary: Начало регистрации по номеру телефона
+      description: Отправляет SMS с кодом подтверждения на указанный номер телефона
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - phone
+              properties:
+                phone:
+                  type: string
+                  description: Номер телефона в международном формате
+                  example: "+79001234567"
+      responses:
+        '200':
+          description: SMS с кодом подтверждения отправлено
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Код подтверждения отправлен"
+                  retryAfter:
+                    type: integer
+                    description: Время в секундах до возможности повторной отправки
+                    example: 60
+        '400':
+          description: Неверный формат номера телефона
+        '409':
+          description: Пользователь с таким номером уже существует
+
+  /auth/register/verify:
+    post:
+      summary: Подтверждение SMS-кода и завершение регистрации
+      description: Проверяет корректность кода и создает нового пользователя
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - phone
+                - code
+              properties:
+                phone:
+                  type: string
+                  description: Номер телефона, на который отправлен код
+                  example: "+79001234567"
+                code:
+                  type: string
+                  description: 6-значный код из SMS
+                  example: "123456"
+      responses:
+        '200':
+          description: Пользователь успешно зарегистрирован, выданы токены
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+                    description: JWT токен для доступа к API
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+                  refreshToken:
+                    type: string
+                    description: Токен для обновления accessToken
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+                  expiresIn:
+                    type: integer
+                    description: Время жизни accessToken в секундах
+                    example: 3600
+        '400':
+          description: Неверный код подтверждения
+        '410':
+          description: Код подтверждения истек
+
+  /auth/login:
+    post:
+      summary: Вход в систему
+      description: Аутентификация по номеру телефона и SMS-коду
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - phone
+                - code
+              properties:
+                phone:
+                  type: string
+                  description: Номер телефона
+                  example: "+79001234567"
+                code:
+                  type: string
+                  description: 6-значный код из SMS
+                  example: "123456"
+      responses:
+        '200':
+          description: Успешный вход, выданы токены
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+                  refreshToken:
+                    type: string
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+                  expiresIn:
+                    type: integer
+                    example: 3600
+        '401':
+          description: Неверный код или телефон
+
+  /auth/logout:
+    post:
+      summary: Выход из системы
+      description: Завершает текущую сессию пользователя
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Успешный выход из системы
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Выход выполнен успешно"
+        '401':
+          description: Неавторизован (отсутствует или истек токен)
+
+  /auth/refresh:
+    post:
+      summary: Обновление токена доступа
+      description: Получает новую пару токенов по refreshToken
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - refreshToken
+              properties:
+                refreshToken:
+                  type: string
+                  description: Действительный refresh токен
+                  example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+      responses:
+        '200':
+          description: Токены успешно обновлены
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+                  refreshToken:
+                    type: string
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+                  expiresIn:
+                    type: integer
+                    example: 3600
+        '401':
+          description: Недействительный refreshToken
+
+  /auth/sessions:
+    get:
+      summary: Получение списка активных сессий
+      description: Возвращает информацию о всех активных сессиях пользователя
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Список активных сессий
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    sessionId:
+                      type: string
+                      example: "sess_123456"
+                    deviceInfo:
+                      type: string
+                      example: "Chrome на Windows"
+                    ipAddress:
+                      type: string
+                      example: "192.168.1.1"
+                    lastActive:
+                      type: string
+                      format: date-time
+                      example: "2024-01-20T10:30:00Z"
+                    isCurrent:
+                      type: boolean
+                      description: Является ли текущей сессией
+                      example: true
+        '401':
+          description: Неавторизован
+
+    delete:
+      summary: Завершение всех сессий
+      description: Завершает все активные сессии пользователя (кроме текущей)
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Все сессии завершены
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Все сессии завершены"
+                  terminatedCount:
+                    type: integer
+                    example: 3
+        '401':
+          description: Неавторизован
+
+  /auth/sessions/{sessionId}:
+    delete:
+      summary: Завершение конкретной сессии
+      description: Завершает указанную сессию пользователя
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: sessionId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID сессии для завершения
+          example: "sess_123456"
+      responses:
+        '200':
+          description: Сессия успешно завершена
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Сессия завершена"
+        '401':
+          description: Неавторизован
+        '403':
+          description: Попытка завершить чужую сессию
+        '404':
+          description: Сессия не найдена
+
+  /auth/profile:
+    get:
+      summary: Получение профиля пользователя
+      description: Возвращает информацию о текущем пользователе
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Информация о пользователе
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: "user_123456"
+                  phone:
+                    type: string
+                    example: "+79001234567"
+                  createdAt:
+                    type: string
+                    format: date-time
+                    example: "2024-01-01T00:00:00Z"
+                  isVerified:
+                    type: boolean
+                    example: true
+        '401':
+          description: Неавторизован
+
+components:
+  securitySchemes:
+    bearerAuth:
+       type: http
+       scheme: bearer
+       bearerFormat: JWT

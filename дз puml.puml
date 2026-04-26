@@ -1,0 +1,97 @@
+@startuml
+
+actor User
+participant "Registration UI" as UI
+participant "API Gateway" as Gateway
+participant "Registration Service" as Reg
+participant "Identity Provider (IdP)" as IdP
+participant "Verification Service" as Verify
+participant "Token Service" as Token
+database "User DB" as UserDB
+
+== Step 1: Ввод номера телефона ==
+User -> UI : Ввод номера телефона
+activate UI
+UI -> Gateway : POST /register/start {phone}
+deactivate UI
+activate Gateway
+Gateway -> Reg : Инициация регистрации
+deactivate Gateway
+
+== Step 2: Проверка уникальности ==
+activate Reg
+Reg -> IdP : Проверка существования номера
+activate IdP
+IdP -> UserDB : SELECT user WHERE phone = ?
+activate UserDB
+UserDB --> IdP : Результат поиска
+deactivate UserDB
+
+alt Телефон не найден
+    IdP --> Reg : OK (уникальный)
+    deactivate IdP
+    
+    == Step 3: Отправка SMS-кода ==
+    Reg -> Verify : Отправить SMS-код (phone)
+    activate Verify
+    Verify --> Reg : Код отправлен
+    deactivate Verify
+    
+    Reg --> Gateway : Запрос кода подтверждения
+    activate Gateway
+    Gateway --> UI : verification required
+    deactivate Gateway
+    UI --> User : Запрос кода подтверждения
+    
+    == Step 4: Ввод кода подтверждения ==
+    User -> UI : Ввод кода подтверждения
+    activate UI
+    UI -> Gateway : POST /register/verify {phone, code}
+    deactivate UI
+    activate Gateway
+    Gateway -> Reg : Проверка кода (phone, code)
+    deactivate Gateway
+    
+    == Step 5: Проверка кода ==
+    activate Reg
+    Reg -> Verify : Проверить код (phone, code)
+    activate Verify
+    Verify --> Reg : Код верный
+    deactivate Verify
+    
+    == Step 6: Создание пользователя ==
+    Reg -> IdP : Создать пользователя (phone)
+    activate IdP
+    IdP -> UserDB : INSERT user
+    activate UserDB
+    UserDB --> IdP : Пользователь создан
+    deactivate UserDB
+    IdP --> Reg : user created
+    deactivate IdP
+    
+    == Step 7: Генерация токенов ==
+    Reg -> Token : Сгенерировать токены (userId)
+    activate Token
+    Token --> Reg : access + refresh tokens
+    deactivate Token
+    
+    == Step 8: Возврат результата ==
+    Reg --> Gateway : tokens
+    activate Gateway
+    Gateway --> UI : tokens
+    deactivate Gateway
+    UI --> User : Регистрация успешна
+    deactivate Reg
+
+else Телефон уже зарегистрирован
+    IdP --> Reg : Пользователь существует
+    deactivate IdP
+    Reg --> Gateway : error (user exists)
+    activate Gateway
+    Gateway --> UI : error (user exists)
+    deactivate Gateway
+    UI --> User : Ошибка: номер уже зарегистрирован
+    deactivate Reg
+end
+
+@enduml
