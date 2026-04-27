@@ -23,11 +23,11 @@
 
 | Артефакт | Что это | Ссылка |
 |----------|---------|--------|
-| Анализ As Is → To Be | Текст: текущие проблемы → решения | [PDF](coffeeshop_project/Анализ%20as%20is%20-%20fr%20-%20to%20be.pdf) |
-| Функциональные требования | 20 требований (FR‑1…FR‑20) |  [PDF](/coffeeshop_project/Проблемы%20и%20функциональные%20требования%20к%20системе.pdf) |
-| Таблица декомпозиции | Пошаговое описание процесса | [PDF](/coffeeshop_project/Декомпозиция%20заказа.pdf) |
-| BPMN As Is | Схема текущего процесса (со всеми ошибками) | [PNG](/coffeeshop_project/bpmn-as-is.png) · [исходник](/coffeeshop_project/bpmn-as-is.puml) |
-| BPMN To Be | Целевой процесс (автоматизация, уведомления) | [PNG](/bpmn_to_be.png) · [исходник](/bpmn_to_be.puml) |
+| Анализ As Is → To Be | Текст: текущие проблемы → решения | [PDF](Анализ%20as%20is%20-%20fr%20-%20to%20be.pdf) |
+| Функциональные требования | 20 требований (FR‑1…FR‑20) |  [PDF](Проблемы%20и%20функциональные%20требования%20к%20системе.pdf) |
+| Таблица декомпозиции | Пошаговое описание процесса | [PDF](Декомпозиция%20заказа.pdf) |
+| BPMN As Is | Схема текущего процесса (со всеми ошибками) | [PNG](bpmn-as-is.png) · [исходник](bpmn-as-is.puml) |
+| BPMN To Be | Целевой процесс (автоматизация, уведомления) | [PNG](bpmn_to_be.png) · [исходник](bpmn_to_be.puml) |
 | Sequence: забыли заказ | Неотлаженный процесс передачи заказа | [PNG](sequence-forgotorder.png) · [исходник](sequence-forgotorder.puml) |
 | Sequence: отсутствие сотрудников | Сотрудник не на месте, долгое ожидание | [PNG](sequence_staff_absent.png) · [исходник](sequence_staff_absent.puml) |
 | Sequence: отсутствие ингредиентов | Нет сиропа / риса → замена или возврат | [PNG](sequence_missing_ingredients.png) · [исходник](sequence_missing_ingredients.puml) |
