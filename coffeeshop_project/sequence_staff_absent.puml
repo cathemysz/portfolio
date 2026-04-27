@@ -1,0 +1,69 @@
+@startuml отсутствие сотрудника
+actor "Гость" as Guest
+actor "Кассир" as Cashier
+actor "Бариста" as Barista
+actor "Повар" as Cook
+
+Guest -> Cashier: Заходит в кофейню, делает заказ
+Cashier -> Cashier: Принимает заказ
+
+alt Бариста и повара нет на рабочем месте
+    Cashier -> Cashier: Не может покинуть зал и искать их
+    alt Бариста и повар долго отсутствуют
+        Cashier -> Cashier: Ожидание затягивается
+        Guest -> Guest: Время ожидания увеличивается
+        alt Гость недоволен и просит вернуть деньги
+            Guest -> Cashier: Требует возврат
+            Cashier -> Guest: Возвращает деньги
+            Guest -> Guest: Уходит
+            destroy Guest
+            
+        else Гость согласен подождать, но недоволен
+            Guest -> Guest: Ожидает, выражает недовольство
+            Cashier -> Cashier: Фиксирует задержку
+            note right of Cashier
+                Бариста и повар возвращаются
+                через длительное время
+            end note
+            Barista -> Barista: Готовит напиток ускоренно
+            Cook -> Cook: Готовит блюдо ускоренно
+            Barista -> Guest: Отдаёт напиток
+            Cook -> Barista: Передаёт блюдо
+            Barista -> Guest: Относит блюдо гостю
+            Guest -> Guest: Недоволен, но принимает заказ
+            Guest -> Guest: Уходит
+            destroy Guest
+        end
+    else Бариста и повар быстро возвращаются
+        Cashier -> Cashier: Фиксирует задержку минимальна
+        Barista -> Barista: Готовит напиток ускоренно
+        Cook -> Cook: Готовит блюдо ускоренно
+        Barista -> Guest: Отдаёт напиток
+        Cook -> Barista: Передаёт блюдо
+        Barista -> Guest: Относит блюдо гостю
+
+        alt Гость замечает потерю качества
+            Guest -> Guest: Недоволен
+            alt Гость пишет негативный отзыв
+                Guest -> Guest: Оставляет плохой отзыв
+            else Гость не пишет отзыв
+                Guest -> Guest: Выражает недовольство устно
+                Cashier -> Guest: Приносит извинения
+            end
+            Guest -> Guest: Уходит недовольным
+            destroy Guest
+        else Гость не замечает потерю качества
+            Guest -> Guest: Наслаждается, уходит довольным
+            destroy Guest
+        end
+    end
+else Бариста и повар присутствуют на месте
+    Barista -> Barista: Готовит напиток в нормальном режиме
+    Cook -> Cook: Готовит блюдо в нормальном режиме
+    Barista -> Guest: Отдаёт напиток
+    Cook -> Barista: Передаёт блюдо
+    Barista -> Guest: Относит блюдо гостю
+    Guest -> Guest: Наслаждается, уходит довольным
+    destroy Guest
+end
+@enduml

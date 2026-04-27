@@ -1,0 +1,58 @@
+@startuml ошибки персонала
+actor "Гость" as Guest
+actor "Кассир" as Cashier
+actor "Бариста" as Barista
+actor "Повар" as Cook
+
+Guest -> Cashier: Заходит в кофейню, делает заказ:\nкапучино с солёной карамелью и рисовую кашу
+Cashier -> Cashier: Принимает заказ
+Cashier -> Barista: Передаёт заказ (напиток)
+Cashier -> Cook: Передаёт заказ (блюдо)
+
+alt Бариста не обучен
+    Barista -> Barista: Не помнит количество молока и сиропа
+    Barista -> Barista: Не умеет правильно взбивать пену
+    Barista -> Barista: Готовит как получается
+    Barista -> Guest: Отдаёт напиток гостю
+    Guest -> Guest: Недоволен качеством и вкусом напитка
+    Guest -> Cashier: Требует возврат денег
+    Cashier -> Guest: Возвращает деньги
+    alt Гость пишет негативный отзыв
+        Guest -> Guest: Оставляет плохой отзыв
+    end
+    Guest -> Guest: Уходит недовольным
+    destroy Guest
+else Бариста обучен
+    Barista -> Barista: Готовит правильный и вкусный капучино
+    Barista -> Guest: Отдаёт напиток гостю
+    Guest -> Guest: Наслаждается напитком
+    alt Гость пишет положительный отзыв
+        Guest -> Guest: Оставляет хороший отзыв
+    end
+end
+
+alt Повар не обучен
+    Cook -> Cook: Не помнит техкарту (рисовую кашу)
+    Cook -> Cook: Не умеет стабильно готовить правильный рис
+    Cook -> Cook: Готовит как умеет
+    Cook -> Barista: Передаёт блюдо
+    Barista -> Guest: Относит блюдо гостю
+    Guest -> Guest: Недоволен (неправильная, невкусная каша)
+    alt Гость пишет негативный отзыв
+        Guest -> Guest: Оставляет плохой отзыв
+    end
+    Guest -> Guest: Уходит недовольным
+    destroy Guest
+else Повар обучен
+    Cook -> Cook: Хорошо обучен, знает техкарту
+    Cook -> Cook: Готовит вкусную кашу
+    Cook -> Barista: Передаёт блюдо
+    Barista -> Guest: Относит блюдо гостю
+    Guest -> Guest: Наслаждается блюдом
+    alt Гость пишет положительный отзыв
+        Guest -> Guest: Оставляет хороший отзыв
+    end
+    Guest -> Guest: Уходит довольным
+    destroy Guest
+end
+@enduml

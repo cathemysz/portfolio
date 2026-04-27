@@ -1,0 +1,65 @@
+@startuml нет ингредиентов
+actor "Гость" as Guest
+actor "Кассир" as Cashier
+actor "Бариста" as Barista
+actor "Повар" as Cook
+
+Guest -> Cashier: Заходит в кофейню, делает заказ:\nкапучино с солёной карамелью и рисовую кашу
+Cashier -> Cashier: Принимает заказ
+Cashier -> Barista: Передаёт заказ (напиток)
+Cashier -> Cook: Передаёт заказ (блюдо)
+
+alt Солёная карамель закончилась
+    Barista -> Cashier: Сообщает об отсутствии солёной карамели
+    Cashier -> Guest: Передаёт информацию об отсутствии
+    alt Гость просит вернуть деньги
+        Guest -> Cashier: Требует возврат
+        Cashier -> Guest: Возвращает деньги
+        Guest -> Guest: Уходит недовольным
+        destroy Guest
+    else Гость соглашается на замену сиропа
+        Guest -> Cashier: Соглашается на замену
+        Cashier -> Barista: Передаёт новый заказ (замена сиропа)
+        Barista -> Barista: Готовит напиток с заменой
+        Barista -> Guest: Отдаёт напиток гостю
+        Guest -> Guest: Недоволен, но принимает
+        alt Гость пишет негативный отзыв
+            Guest -> Guest: Оставляет плохой отзыв
+        end
+        Guest -> Guest: Уходит
+        destroy Guest
+    end
+else Солёная карамель в наличии
+    Barista -> Barista: Готовит капучино с солёной карамелью
+    Barista -> Guest: Отдаёт напиток гостю
+end
+
+alt Рис закончился
+    Cook -> Cashier: Сообщает об отсутствии риса
+    Cashier -> Guest: Передаёт информацию об отсутствии блюда
+    alt Гость просит вернуть деньги
+        Guest -> Cashier: Требует возврат
+        Cashier -> Guest: Возвращает деньги
+        Guest -> Guest: Уходит недовольным
+        destroy Guest
+    else Гость соглашается на замену блюда
+        Guest -> Cashier: Соглашается на замену
+        Cashier -> Cook: Передаёт новый заказ (замена блюда)
+        Cook -> Cook: Готовит блюдо с заменой
+        Cook -> Barista: Передаёт блюдо
+        Barista -> Guest: Относит блюдо гостю
+        Guest -> Guest: Недоволен, но принимает
+        alt Гость пишет негативный отзыв
+            Guest -> Guest: Оставляет плохой отзыв
+        end
+        Guest -> Guest: Уходит
+        destroy Guest
+    end
+else Рис в наличии
+    Cook -> Cook: Готовит рисовую кашу
+    Cook -> Barista: Передаёт блюдо
+    Barista -> Guest: Относит блюдо гостю
+    Guest -> Guest: Наслаждается, уходит довольным
+    destroy Guest
+end
+@enduml

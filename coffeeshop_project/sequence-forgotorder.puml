@@ -1,0 +1,56 @@
+@startuml потеря заказов
+actor "Гость" as Guest
+actor "Кассир" as Cashier
+actor "Бариста" as Barista
+actor "Повар" as Cook
+
+Guest -> Cashier: Заходит в кофейню, делает заказ
+Cashier -> Cashier: Принимает заказ
+Cashier -> Barista: Передаёт заказ устно (напиток)
+Cashier -> Cook: Передаёт заказ устно (блюдо)
+
+alt Бариста забывает про заказ
+    Barista -> Barista: Не готовит напиток
+    Guest -> Guest: Недоволен ожиданием
+    alt Гость жалуется кассиру
+        Guest -> Cashier: Выражает недовольство
+        Cashier -> Barista: Напоминает о заказе
+        Barista -> Barista: Готовит напиток с задержкой
+        Barista -> Guest: Отдаёт напиток гостю
+    else Гость пишет плохой отзыв
+        Guest -> Guest: Оставляет негативный отзыв
+        Cashier -> Barista: Напоминает о заказе
+        Barista -> Barista: Готовит напиток с задержкой
+        Barista -> Guest: Отдаёт напиток гостю
+    end
+else Бариста не забывает
+    Barista -> Barista: Готовит напиток
+    Barista -> Guest: Отдаёт напиток гостю
+    Guest -> Guest: Наслаждается напитком, ждёт блюдо
+
+    alt Повар забыл про заказ
+        Cook -> Cook: Не готовит блюдо
+        Guest -> Guest: Ждёт очень долго
+        alt Гость соглашается подождать ещё
+            Guest -> Guest: Ждёт, но недоволен
+            Cashier -> Cook: Напоминает о заказе
+            Cook -> Cook: Готовит блюдо с задержкой
+            Cook -> Barista: Передаёт блюдо
+            Barista -> Guest: Относит блюдо гостю
+            Guest -> Guest: Ест и уходит (с недовольством)
+        else Гость просит вернуть деньги
+            Guest -> Cashier: Требует возврат
+            Cashier -> Guest: Возвращает деньги
+            Guest -> Guest: Уходит недовольным
+            destroy Guest
+            
+        end
+    else Повар не забыл
+        Cook -> Cook: Готовит блюдо
+        Cook -> Barista: Передаёт блюдо
+        Barista -> Guest: Относит блюдо гостю
+        Guest -> Guest: Наслаждается, ест и уходит
+        destroy Guest
+    end
+end
+@enduml
