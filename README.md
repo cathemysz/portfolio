@@ -27,4 +27,4 @@
 
 ## Контакты
 
-[Email](cathemysz@gmail.com) · [Telegram](t.me/cathemysz) · [GitHub](github.com/cathemysz)
+cathemysz@gmail.com · t.me/cathemysz · github.com/cathemysz
