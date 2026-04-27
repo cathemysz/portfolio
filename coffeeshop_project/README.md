@@ -23,22 +23,22 @@
 
 | Артефакт | Что это | Ссылка |
 |----------|---------|--------|
-| Анализ As Is → To Be | Текст: текущие проблемы → решения | [открыть](analysis_as_is_to_be.md) |
-| Функциональные требования | 20 требований (FR‑1…FR‑20) | [открыть](functional_requirements.md) · [PDF](functional_requirements.pdf) |
-| Таблица декомпозиции | Пошаговое описание процесса | [открыть](decomposition_table.html) |
-| BPMN As Is | Схема текущего процесса (со всеми ошибками) | [PNG](bpmn_as_is.png) · [исходник](bpmn_as_is.puml) |
-| BPMN To Be | Целевой процесс (автоматизация, уведомления) | [PNG](bpmn_to_be.png) · [исходник](bpmn_to_be.puml) |
-| Sequence: ошибки сотрудников | Забывчивость, задержки, возвраты | [PNG](sequence_human_errors.png) · [исходник](sequence_human_errors.puml) |
+| Анализ As Is → To Be | Текст: текущие проблемы → решения | [PDF](coffeeshop_project/Анализ%20as%20is%20-%20fr%20-%20to%20be.pdf) |
+| Функциональные требования | 20 требований (FR‑1…FR‑20) |  [PDF](/coffeeshop_project/Проблемы%20и%20функциональные%20требования%20к%20системе.pdf) |
+| Таблица декомпозиции | Пошаговое описание процесса | [PDF](/coffeeshop_project/Декомпозиция%20заказа.pdf) |
+| BPMN As Is | Схема текущего процесса (со всеми ошибками) | [PNG](/coffeeshop_project/bpmn-as-is.png) · [исходник](/coffeeshop_project/bpmn-as-is.puml) |
+| BPMN To Be | Целевой процесс (автоматизация, уведомления) | [PNG](/bpmn_to_be.png) · [исходник](/bpmn_to_be.puml) |
+| Sequence: забыли заказ | Неотлаженный процесс передачи заказа | [PNG](sequence-forgotorder.png) · [исходник](sequence-forgotorder.puml) |
 | Sequence: отсутствие сотрудников | Сотрудник не на месте, долгое ожидание | [PNG](sequence_staff_absent.png) · [исходник](sequence_staff_absent.puml) |
 | Sequence: отсутствие ингредиентов | Нет сиропа / риса → замена или возврат | [PNG](sequence_missing_ingredients.png) · [исходник](sequence_missing_ingredients.puml) |
-| Sequence: необученный персонал | Ошибки техкарт, возвраты, отзывы | [PNG](sequence_staff_training.png) · [исходник](sequence_staff_training.puml) |
+| Sequence: необученный персонал | Ошибки техкарт, возвраты, отзывы | [PNG](sequence_human_errors.png) · [исходник](sequence_human_errors.puml) |
 
 ---
 
 ## Контакты
 
-cathemysz@gmail.com
 t.me/cathemysz 
+cathemysz@gmail.com
 github.com/cathemysz
 
 ---
