@@ -2,7 +2,7 @@
 
 **Автор:** Ныркова Екатерина  
 **Роль:** системный аналитик (junior)  
-**Инструменты:** PlantUML, UML Activity, Sequence, Use Case
+**Инструменты:** UML Activity, Sequence, Use Case
 
 ---
 
