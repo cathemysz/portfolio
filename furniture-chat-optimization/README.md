@@ -44,7 +44,7 @@
 
 ## Документация
 
-- [Полный текст кейса (Markdown)](./docs/analysis.md)
+- [Полный текст кейса (Markdown)](furniture-chat-optimization/docs/analysis.md)
 - [Полный текст кейса (PDF)](./docs/analysis.pdf)
 
 ---
