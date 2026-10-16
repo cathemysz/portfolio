@@ -22,30 +22,30 @@
 ## Ключевые артефакты
 
 ### Текущий процесс (AS IS)
-![Activity AS IS](./diagrams/as-is-activity.png)
+![Activity AS IS](./pics/IMG_20261016_153249_468.jpg)
 *Схема текущего процесса: рутина на чатчике, лишнее звено — оператор.*
 
 ### Эмоциональный путь клиента (Sequence AS IS)
-![Sequence AS IS](./diagrams/as-is-sequence.png)
+![Sequence AS IS](./pics/IMG_20261016_153646_643.jpg)
 *CJM: как клиент воспринимает текущий процесс.*
 
 ### Целевой процесс (TO BE)
-![Activity TO BE](./diagrams/to-be-activity.png)
+![Activity TO BE](./pics/IMG_20261016_153650_171.jpg)
 *Схема целевого процесса: бот забирает рутину, чатчик закрывает сделку.*
 
 ### Распределение ролей до и после
-![Use Case AS IS](./diagrams/use-case-as-is.png)
+![Use Case AS IS](./pics/IMG_20261016_153728_090.jpg)
 *AS IS: Дарья делает всё, Яна переводит.*
 
-![Use Case TO BE](./diagrams/use-case-to-be.png)
+![Use Case TO BE](./pics/IMG_20261016_153938_811.jpg)
 *TO BE: Бот делает рутину, Дарья — только продажи.*
 
 ---
 
 ## Документация
 
-- [Полный текст кейса (Markdown)](furniture-chat-optimization/docs/analysis.md)
-- [Полный текст кейса (PDF)](./docs/analysis.pdf)
+- [Полный текст кейса (Markdown)](./docs/analysis.md)
+- [Полный текст кейса (PDF)](./docs/оптимизация%20чатов.pdf)
 
 ---
 
