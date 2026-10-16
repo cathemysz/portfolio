@@ -21,6 +21,3 @@
 
 ---
 
-## Ссылки
-
-- [Основной пет‑проект](../coffeeshop_project/README.md)
